@@ -8,11 +8,17 @@ export interface IConfig {
   api: {
     baseURL: string;
   };
-  email: {
-    fromEmail: string;
-    sendgridAPIKey: string;
-    mailgunAPIKey: string;
-    mailgunDOMAIN: string;
+  database: {
+    connectionName: string;
+    databaseType: string;
+    host: string;
+    port: number;
+    username: string;
+    password: string;
+    database: string;
+    cacheDuration: number;
+    maxQueryExecutionTime: number;
+    readReplicationSlaves: string;
   };
 }
 
@@ -37,25 +43,55 @@ const config = convict<IConfig>({
       default: '/api/v1',
     },
   },
-  email: {
-    fromEmail: {
+  database: {
+    connectionName: {
       format: String,
-      env: 'FROM_EMAIL',
-      default: 'sm-email-service@yopmail.com',
-    },
-    sendgridAPIKey: {
-      format: String,
-      env: 'API_KEY_SENDGRID',
+      env: 'CONN_NAME',
       default: '',
     },
-    mailgunAPIKey: {
+    databaseType: {
       format: String,
-      env: 'API_KEY_MAILGUN',
+      env: 'TYPEORM_CONNECTION',
       default: '',
     },
-    mailgunDOMAIN: {
+    host: {
       format: String,
-      env: 'MAILGUN_DOMAIN',
+      env: 'TYPEORM_HOST',
+      default: '',
+    },
+    port: {
+      format: 'port',
+      env: 'TYPEORM_PORT',
+      default: 0,
+    },
+    username: {
+      format: String,
+      env: 'TYPEORM_USERNAME',
+      default: '',
+    },
+    password: {
+      format: String,
+      env: 'TYPEORM_PASSWORD',
+      default: '',
+    },
+    database: {
+      format: String,
+      env: 'TYPEORM_DATABASE',
+      default: '',
+    },
+    cacheDuration: {
+      format: Number,
+      env: 'TYPEORM_CACHE_DURATION',
+      default: 360000, // 1 hour
+    },
+    maxQueryExecutionTime: {
+      format: Number,
+      env: 'TYPEORM_MAX_QUERY_EXECUTION_TIME',
+      default: 300,
+    },
+    readReplicationSlaves: {
+      format: String,
+      env: 'TYPEORM_READ_REPLICATION_SLAVES', // comma separated hostnames of read relication slaves
       default: '',
     },
   },

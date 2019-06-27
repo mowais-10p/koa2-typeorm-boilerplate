@@ -11,7 +11,7 @@ const isProduction = config.env === 'production';
 const handler = async (ctx: Context, next: () => void) => {
   try {
     await next();
-    if (ctx.state.message !== 'success') {
+    if (!ctx.state.data) {
       throw Boom.notFound('API not found');
     }
   } catch (err) {

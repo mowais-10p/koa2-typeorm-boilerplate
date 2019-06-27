@@ -21,14 +21,3 @@ export const validate = <T>(payload: T, schema: SchemaLike, options?: Validation
   return value;
 };
 
-export const validateEmailShouldBeUnique = (
-  to: string[],
-  cc: string[] = [],
-  bcc: string[] = [],
-) => {
-  const combined = to.concat(cc).concat(bcc);
-  const hasDuplicates = new Set(combined).size !== combined.length;
-  if (hasDuplicates) {
-    throw badRequest('Emails should be unique between to,cc and bcc');
-  }
-};

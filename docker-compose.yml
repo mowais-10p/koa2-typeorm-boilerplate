@@ -2,7 +2,9 @@ version: '3.7'
 
 services:
   app:
-    container_name: sm-email-service
+    container_name: koa2-typeorm-boilerplate
+    networks:
+      - nodejs101
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,9 +17,32 @@ services:
     ports:
       - 4001:4001
       # - 9229:9229
+    depends_on:
+      - postgres
     entrypoint:
       - ./entrypoint.sh
       - ./node_modules/.bin/nodemon
       #- --inspect-brk=0.0.0.0 , break before code starts
       #- --inspect=0.0.0.0
       - ./bin/server
+
+  postgres:
+    image: mdillon/postgis:10-alpine
+    container_name: koa2-typeorm-db
+    networks:
+      - nodejs101
+    environment:
+      POSTGRES_DB: nodejs101
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - 'postgres:/var/lib/postgresql/data'
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres: ~
+
+networks:
+  nodejs101:
+    name: koa2-typeorm-boilerplate
